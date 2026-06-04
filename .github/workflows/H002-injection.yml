@@ -1,0 +1,16 @@
+# LAB VICTIM (H002) — script injection. The PR title is interpolated straight
+# into a run: block, so an attacker-chosen title executes on the runner.
+name: Lab Title Echo
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    env:
+      LAB_SECRET: ${{ secrets.LAB_SECRET }}   # canary in env for exfil proof
+    steps:
+      - name: Greet
+        run: echo "Thanks for the PR titled: ${{ github.event.pull_request.title }}"
